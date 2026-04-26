@@ -1,0 +1,105 @@
+{
+    "NavigatorAgent": {
+        "checkpoints": [
+            {
+                "steps": 331603,
+                "file_path": "results\\TestChannel\\NavigatorAgent\\NavigatorAgent-331603.onnx",
+                "reward": 4.107087466679514,
+                "creation_time": 1772645061.5965147,
+                "auxillary_file_paths": [
+                    "results\\TestChannel\\NavigatorAgent\\NavigatorAgent-331603.pt"
+                ]
+            },
+            {
+                "steps": 499960,
+                "file_path": "results\\TestChannel\\NavigatorAgent\\NavigatorAgent-499960.onnx",
+                "reward": -3.600667261960916,
+                "creation_time": 1772647261.6813421,
+                "auxillary_file_paths": [
+                    "results\\TestChannel\\NavigatorAgent\\NavigatorAgent-499960.pt"
+                ]
+            },
+            {
+                "steps": 500838,
+                "file_path": "results\\TestChannel\\NavigatorAgent\\NavigatorAgent-500838.onnx",
+                "reward": -3.594027150014881,
+                "creation_time": 1772647395.8237476,
+                "auxillary_file_paths": [
+                    "results\\TestChannel\\NavigatorAgent\\NavigatorAgent-500838.pt"
+                ]
+            },
+            {
+                "steps": 613409,
+                "file_path": "results\\TestChannel\\NavigatorAgent\\NavigatorAgent-613409.onnx",
+                "reward": -1.9292219985742123,
+                "creation_time": 1772648952.346514,
+                "auxillary_file_paths": [
+                    "results\\TestChannel\\NavigatorAgent\\NavigatorAgent-613409.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 613409,
+            "file_path": "results\\TestChannel\\NavigatorAgent.onnx",
+            "reward": -1.9292219985742123,
+            "creation_time": 1772648952.346514,
+            "auxillary_file_paths": [
+                "results\\TestChannel\\NavigatorAgent\\NavigatorAgent-613409.pt"
+            ]
+        }
+    },
+    "ObserverAgent": {
+        "checkpoints": [
+            {
+                "steps": 331603,
+                "file_path": "results\\TestChannel\\ObserverAgent\\ObserverAgent-331603.onnx",
+                "reward": -0.6156000420451164,
+                "creation_time": 1772645062.1600766,
+                "auxillary_file_paths": [
+                    "results\\TestChannel\\ObserverAgent\\ObserverAgent-331603.pt"
+                ]
+            },
+            {
+                "steps": 499960,
+                "file_path": "results\\TestChannel\\ObserverAgent\\ObserverAgent-499960.onnx",
+                "reward": -1.5048000529408454,
+                "creation_time": 1772647261.5780456,
+                "auxillary_file_paths": [
+                    "results\\TestChannel\\ObserverAgent\\ObserverAgent-499960.pt"
+                ]
+            },
+            {
+                "steps": 500838,
+                "file_path": "results\\TestChannel\\ObserverAgent\\ObserverAgent-500838.onnx",
+                "reward": -1.504833387831847,
+                "creation_time": 1772647395.7372794,
+                "auxillary_file_paths": [
+                    "results\\TestChannel\\ObserverAgent\\ObserverAgent-500838.pt"
+                ]
+            },
+            {
+                "steps": 613409,
+                "file_path": "results\\TestChannel\\ObserverAgent\\ObserverAgent-613409.onnx",
+                "reward": -1.5047000482678414,
+                "creation_time": 1772648952.4397523,
+                "auxillary_file_paths": [
+                    "results\\TestChannel\\ObserverAgent\\ObserverAgent-613409.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 613409,
+            "file_path": "results\\TestChannel\\ObserverAgent.onnx",
+            "reward": -1.5047000482678414,
+            "creation_time": 1772648952.4397523,
+            "auxillary_file_paths": [
+                "results\\TestChannel\\ObserverAgent\\ObserverAgent-613409.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "1.13.1+cpu"
+    }
+}

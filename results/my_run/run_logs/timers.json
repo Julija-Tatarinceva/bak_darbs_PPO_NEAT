@@ -1,0 +1,47 @@
+{
+    "name": "root",
+    "metadata": {
+        "timer_format_version": "0.1.0",
+        "start_time_seconds": "1770411346",
+        "python_version": "3.9.13 (tags/v3.9.13:6de2ca5, May 17 2022, 16:36:42) [MSC v.1929 64 bit (AMD64)]",
+        "command_line_arguments": "C:\\Users\\juuli\\AppData\\Local\\Programs\\Python\\Python39\\lib\\site-packages\\mlagents\\trainers\\learn.py config.yaml --run-id=my_run --force",
+        "mlagents_version": "0.30.0",
+        "mlagents_envs_version": "0.30.0",
+        "communication_protocol_version": "1.5.0",
+        "pytorch_version": "1.13.1+cpu",
+        "numpy_version": "1.21.2",
+        "end_time_seconds": "1770411418"
+    },
+    "total": 71.6114377,
+    "count": 1,
+    "self": 0.032908599999984744,
+    "children": {
+        "run_training.setup": {
+            "total": 0.08534759999999997,
+            "count": 1,
+            "self": 0.08534759999999997
+        },
+        "TrainerController.start_learning": {
+            "total": 71.4931815,
+            "count": 1,
+            "self": 0.001121100000020192,
+            "children": {
+                "TrainerController._reset_env": {
+                    "total": 71.49201889999999,
+                    "count": 1,
+                    "self": 71.49201889999999
+                },
+                "trainer_threads": {
+                    "total": 4.799999999249849e-06,
+                    "count": 1,
+                    "self": 4.799999999249849e-06
+                },
+                "TrainerController._save_models": {
+                    "total": 3.669999999544871e-05,
+                    "count": 1,
+                    "self": 3.669999999544871e-05
+                }
+            }
+        }
+    }
+}

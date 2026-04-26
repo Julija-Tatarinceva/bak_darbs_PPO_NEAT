@@ -1,0 +1,65 @@
+{
+    "Walker": {
+        "checkpoints": [
+            {
+                "steps": 3805842,
+                "file_path": "results\\TestFive\\Walker\\Walker-3805842.onnx",
+                "reward": 4.208088494077021,
+                "creation_time": 1771944798.5413494,
+                "auxillary_file_paths": [
+                    "results\\TestFive\\Walker\\Walker-3805842.pt"
+                ]
+            },
+            {
+                "steps": 3999964,
+                "file_path": "results\\TestFive\\Walker\\Walker-3999964.onnx",
+                "reward": 3.1339569000097423,
+                "creation_time": 1771948292.3416843,
+                "auxillary_file_paths": [
+                    "results\\TestFive\\Walker\\Walker-3999964.pt"
+                ]
+            },
+            {
+                "steps": 4114982,
+                "file_path": "results\\TestFive\\Walker\\Walker-4114982.onnx",
+                "reward": 7.2059117436408995,
+                "creation_time": 1771949965.74438,
+                "auxillary_file_paths": [
+                    "results\\TestFive\\Walker\\Walker-4114982.pt"
+                ]
+            },
+            {
+                "steps": 4499959,
+                "file_path": "results\\TestFive\\Walker\\Walker-4499959.onnx",
+                "reward": 4.01290086370248,
+                "creation_time": 1771955392.1155465,
+                "auxillary_file_paths": [
+                    "results\\TestFive\\Walker\\Walker-4499959.pt"
+                ]
+            },
+            {
+                "steps": 4537577,
+                "file_path": "results\\TestFive\\Walker\\Walker-4537577.onnx",
+                "reward": 6.314143302828767,
+                "creation_time": 1771956021.6349397,
+                "auxillary_file_paths": [
+                    "results\\TestFive\\Walker\\Walker-4537577.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 4537577,
+            "file_path": "results\\TestFive\\Walker.onnx",
+            "reward": 6.314143302828767,
+            "creation_time": 1771956021.6349397,
+            "auxillary_file_paths": [
+                "results\\TestFive\\Walker\\Walker-4537577.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "1.13.1+cpu"
+    }
+}
