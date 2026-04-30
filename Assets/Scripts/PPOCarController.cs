@@ -11,9 +11,9 @@ public class PPOCarController : Agent
     public float SensorRange = 10f;
 
     private Rigidbody rb;
-    private int CurrentPiece = 0;
-    private int LastPiece = -1;
-    private int WallHits = 0;
+    private int currentPiece = 0;
+    private int lastPiece = -1;
+    private int wallHits = 0;
     private float episodeStartTime;
     private bool goalReached = false;
     private Vector3 startPosition;
@@ -24,40 +24,38 @@ public class PPOCarController : Agent
     private Vector3[] lastRayOrigins = new Vector3[5];
     private Vector3[] lastRayDirs = new Vector3[5];
     private float[] lastRayLengths = new float[5];
+    
+    private int episodeCount = 0;
+    private int fixedUpdateCount = 0; // Added counter for FixedUpdate
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         startPosition = transform.position;
         startRotation = transform.rotation;
-
-        // Diagnostic: Print all colliders under this car
-        Collider[] carColliders = GetComponentsInChildren<Collider>();
-        Debug.Log($"[CAR] Colliders attached to car: {carColliders.Length}");
-        foreach (var c in carColliders)
-        {
-            Debug.Log($"[CAR] Collider: {c.name}, isTrigger={c.isTrigger}, enabled={c.enabled}, tag={c.tag}, layer={c.gameObject.layer}");
-        }
-
-        // Diagnostic: Print all colliders under the first road piece found
-        var road = GameObject.FindGameObjectWithTag("Road");
-        if (road != null)
-        {
-            Collider[] roadColliders = road.GetComponentsInChildren<Collider>();
-            Debug.Log($"[ROAD] Colliders attached to road: {roadColliders.Length}");
-            foreach (var c in roadColliders)
-            {
-                Debug.Log($"[ROAD] Collider: {c.name}, isTrigger={c.isTrigger}, enabled={c.enabled}, tag={c.tag}, layer={c.gameObject.layer}");
-            }
-        }
-        else
-        {
-            Debug.Log("[ROAD] No GameObject with tag 'Road' found in scene!");
-        }
     }
 
     public override void OnEpisodeBegin()
     {
+        // Reset episode start time
+        episodeStartTime = Time.time;
+
+        // Log the episode data before resetting for the next episode
+        Logger.LogEpisode(
+            "PPO",
+            episodeCount++,
+            currentPiece,
+            wallHits,
+            GetCumulativeReward(),
+            fixedUpdateCount
+        );
+
+        // Debug log for episode start (conditional to avoid flooding)
+        if (episodeCount % 100 == 0) // Log every 100 episodes
+        {
+            Debug.Log("PPO Episode started");
+        }
+
         // Regenerate the track for PPO
         if (trackGenerator == null)
         {
@@ -65,7 +63,8 @@ public class PPOCarController : Agent
         }
         if (trackGenerator != null)
         {
-            trackGenerator.GenerateNewTrack();
+            int seed = SeedManager.GetSeedForEpisode(episodeCount);
+            trackGenerator.GenerateTrack(seed);
         }
 
         // Reset car position and state
@@ -73,14 +72,12 @@ public class PPOCarController : Agent
         transform.rotation = startRotation;
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
-        CurrentPiece = 0;
-        LastPiece = -1;
-        WallHits = 0;
+        currentPiece = 0;
+        lastPiece = -1;
+        wallHits = 0;
         goalReached = false;
-        episodeStartTime = Time.time;
 
         Debug.Log("PPO Episode started");
-
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -200,52 +197,52 @@ public class PPOCarController : Agent
 
     void OnCollisionEnter(Collision collision)
     {
-        Debug.Log($"[COLLISION] With: {collision.collider.name}, Tag: {collision.collider.tag}");
+        //Debug.Log($"[COLLISION] With: {collision.collider.name}, Tag: {collision.collider.tag}");
         if (collision.collider.CompareTag("Road"))
         {
             RoadPiece rp = collision.collider.GetComponentInParent<RoadPiece>();
-            Debug.Log(rp == null ? "[COLLISION] No RoadPiece component found!" : $"[COLLISION] RoadPiece found, PieceNumber: {rp.PieceNumber}");
-            if (rp != null && rp.PieceNumber != LastPiece && (rp.PieceNumber == CurrentPiece + 1 || (rp.PieceNumber == 0)))
+            //Debug.Log(rp == null ? "[COLLISION] No RoadPiece component found!" : $"[COLLISION] RoadPiece found, PieceNumber: {rp.PieceNumber}");
+            if (rp != null && rp.PieceNumber != lastPiece && (rp.PieceNumber == currentPiece + 1 || (rp.PieceNumber == 0)))
             {
-                LastPiece = CurrentPiece;
-                CurrentPiece = rp.PieceNumber;
+                lastPiece = currentPiece;
+                currentPiece = rp.PieceNumber;
                 AddReward(1f); // Reward for reaching next piece
-                Debug.Log($"PPO Piece reached: {CurrentPiece}");
+                //Debug.Log($"PPO Piece reached: {CurrentPiece}");
             }
-            if (rp != null && rp.PieceNumber == 0 && CurrentPiece > 0)
+            if (rp != null && rp.PieceNumber == 0 && currentPiece > 0)
             {
-                CurrentPiece = 0;
+                currentPiece = 0;
             }
         }
         else if (collision.collider.CompareTag("Wall"))
         {
-            WallHits++;
+            wallHits++;
             AddReward(-0.2f); // Penalty for wall hit
         }
     }
 
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log($"[TRIGGER] With: {other.name}, Tag: {other.tag}");
+        //Debug.Log($"[TRIGGER] With: {other.name}, Tag: {other.tag}");
         if (other.CompareTag("Road"))
         {
             RoadPiece rp = other.GetComponentInParent<RoadPiece>();
-            Debug.Log(rp == null ? "[TRIGGER] No RoadPiece component found!" : $"[TRIGGER] RoadPiece found, PieceNumber: {rp.PieceNumber}");
-            if (rp != null && rp.PieceNumber != LastPiece && (rp.PieceNumber == CurrentPiece + 1 || (rp.PieceNumber == 0)))
+            //Debug.Log(rp == null ? "[TRIGGER] No RoadPiece component found!" : $"[TRIGGER] RoadPiece found, PieceNumber: {rp.PieceNumber}");
+            if (rp != null && rp.PieceNumber != lastPiece && (rp.PieceNumber == currentPiece + 1 || (rp.PieceNumber == 0)))
             {
-                LastPiece = CurrentPiece;
-                CurrentPiece = rp.PieceNumber;
+                lastPiece = currentPiece;
+                currentPiece = rp.PieceNumber;
                 AddReward(1f); // Reward for reaching next piece
-                Debug.Log($"PPO Piece reached: {CurrentPiece}");
+                //Debug.Log($"PPO Piece reached: {CurrentPiece}");
             }
-            if (rp != null && rp.PieceNumber == 0 && CurrentPiece > 0)
+            if (rp != null && rp.PieceNumber == 0 && currentPiece > 0)
             {
-                CurrentPiece = 0;
+                currentPiece = 0;
             }
         }
         else if (other.CompareTag("Wall"))
         {
-            WallHits++;
+            wallHits++;
             AddReward(-0.2f); // Penalty for wall hit
         }
         else if (other.CompareTag("Goal") && !goalReached)
@@ -254,23 +251,21 @@ public class PPOCarController : Agent
             float timeTaken = Time.time - episodeStartTime;
             float speedBonus = 100f / Mathf.Max(timeTaken, 0.1f);
             AddReward(speedBonus + 10f); // Big reward for goal + speed bonus
-            Debug.Log($"PPO Goal reached! Time: {timeTaken:F2}s, Reward: {speedBonus + 10f:F2}");
+
+            // Debug log for goal reached (conditional to avoid flooding)
+            if (episodeCount % 100 == 0) // Log every 100 episodes
+            {
+                Debug.Log($"PPO Goal reached! Time: {timeTaken:F2}s, Reward: {speedBonus + 10f:F2}");
+            }
+
             EndEpisode();
         }
     }
 
-    void OnCollisionStay(Collision collision)
-    {
-        Debug.Log($"[COLLISION STAY] With: {collision.collider.name}, Tag: {collision.collider.tag}, isTrigger={collision.collider.isTrigger}");
-    }
-
-    void OnTriggerStay(Collider other)
-    {
-        Debug.Log($"[TRIGGER STAY] With: {other.name}, Tag: {other.tag}, isTrigger={other.isTrigger}");
-    }
-
     void FixedUpdate()
     {
+        fixedUpdateCount++; // Increment counter on each FixedUpdate
+
         // Draw rays for visualization (only 5 per car per frame, always in the same directions)
         Color[] rayColors = { Color.red, Color.yellow, Color.green, Color.cyan, Color.blue };
         Vector3 origin = transform.position + transform.forward * 1.1f;
@@ -286,24 +281,18 @@ public class PPOCarController : Agent
             Debug.DrawRay(origin, dirs[i] * SensorRange, rayColors[i], 0f);
         }
 
-        // Reward for forward progress
-        float forwardSpeed = Vector3.Dot(rb.linearVelocity, transform.forward);
-        AddReward(forwardSpeed * 0.001f);
-
-        // Small negative reward each step (time penalty)
-        AddReward(-0.001f);
-
-        // Penalty for spinning in place
-        AddReward(-Mathf.Abs(rb.angularVelocity.y) * 0.001f);
-
         // Optional: Check for timeout
         if (Time.time - episodeStartTime > 30f) // 30 seconds timeout
         {
-            // For TensorBoard: Only reward and episode length are logged by default.
-            // If using ML-Agents >=2.0.0, you can use AddEpisodeStat("PiecesPassed", CurrentPiece);
-            // AddEpisodeStat("WallsHit", WallHits);
-            AddReward(CurrentPiece - WallHits * 0.2f); // Final reward based on progress
-            Debug.Log($"PPO Timeout! Pieces: {CurrentPiece}, WallHits: {WallHits}, Final Reward: {CurrentPiece - WallHits * 0.2f:F2}");
+            // Log the episode data before ending
+            Logger.LogEpisode(
+                "PPO",
+                episodeCount++,
+                currentPiece,
+                wallHits,
+                GetCumulativeReward(),
+                fixedUpdateCount // Added fixed update count to log
+            );
             EndEpisode();
         }
     }

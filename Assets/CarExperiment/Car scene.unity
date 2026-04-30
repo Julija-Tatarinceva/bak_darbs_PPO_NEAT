@@ -2620,6 +2620,7 @@ GameObject:
   m_Component:
   - component: {fileID: 657120377}
   - component: {fileID: 657120376}
+  - component: {fileID: 657120378}
   m_Layer: 0
   m_Name: TrackGenerator
   m_TagString: Untagged
@@ -2644,7 +2645,7 @@ MonoBehaviour:
   goalPiece: {fileID: 951437409976906272, guid: 00784b57d0620154bb8d30c25834fc4f, type: 3}
   trackLength: 20
   maxGenerationAttempts: 10
-  difficulty: 1
+  difficulty: 0.5
   sharpTurnProbability: 0.3
   seed: 0
   useCurriculum: 0
@@ -2671,6 +2672,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &657120378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 657120375}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb3f0709581b44c46922e35e91a3e8f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SeedInitializer
 --- !u!1001 &677760113
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3002,7 +3015,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100004, guid: bc8a6ba9c509b6c4b9bd2b715060d813, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: bc8a6ba9c509b6c4b9bd2b715060d813, type: 3}
       propertyPath: m_LocalScale.x

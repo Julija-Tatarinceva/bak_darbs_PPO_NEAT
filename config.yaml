@@ -1,5 +1,5 @@
 behaviors:
-  Car:  # Exact name from Unity logs
+  My Behavior:  # Replace with your exact Behavior Name if different
     trainer_type: ppo
     hyperparameters:
       batch_size: 1024
@@ -18,7 +18,7 @@ behaviors:
       extrinsic:
         gamma: 0.99
         strength: 1.0
-    max_steps: 10000000
+    max_steps: 500000
     time_horizon: 64
     summary_freq: 10000
 
@@ -96,6 +96,3 @@ behaviors:
 #   #   time_horizon: 64
 #   #   summary_freq: 500
 #   #   keep_checkpoints: 5
-
-engine_settings:
-  time_scale: 400  # Lower this to slow down (e.g., 0.5 = half speed)

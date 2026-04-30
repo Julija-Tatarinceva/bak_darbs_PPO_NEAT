@@ -27,6 +27,9 @@ public class Optimizer : MonoBehaviour {
     public TrackGenerator trackGenerator;
 
     Dictionary<IBlackBox, UnitController> ControllerMap = new Dictionary<IBlackBox, UnitController>();
+    // Store evaluation results for the current generation so we can log stats for the best-evaluated phenome
+    class EvalResult { public float fitness; public int pieces; public int wallHits; }
+    List<EvalResult> _evalResults = new List<EvalResult>();
     private DateTime startTime;
     private float timeLeft;
     private float accum;
@@ -35,6 +38,11 @@ public class Optimizer : MonoBehaviour {
 
     private uint Generation;
     private double Fitness;
+    
+    private int episodeCount = 0;
+    private float episodeStartTime;
+
+    private int fixedUpdateCount = 0; // Added counter for FixedUpdate
 
 	// Use this for initialization
 	void Start () {
@@ -79,6 +87,10 @@ public class Optimizer : MonoBehaviour {
         }
     }
 
+    void FixedUpdate() {
+        fixedUpdateCount++; // Increment counter on each FixedUpdate
+    }
+
     public void StartEA()
     {        
         Utility.DebugLog = true;
@@ -105,6 +117,47 @@ public class Optimizer : MonoBehaviour {
 
         Fitness = _ea.Statistics._maxFitness;
         Generation = _ea.CurrentGeneration;
+        // Determine the evaluated phenome with highest fitness this generation (if we have results)
+        int champPieces = 0;
+        int champWallHits = 0;
+        if(_evalResults != null && _evalResults.Count > 0)
+        {
+            float bestFit = float.MinValue;
+            EvalResult best = null;
+            foreach(var r in _evalResults)
+            {
+                if(r.fitness > bestFit)
+                {
+                    bestFit = r.fitness;
+                    best = r;
+                }
+            }
+            if(best != null)
+            {
+                champPieces = best.pieces;
+                champWallHits = best.wallHits;
+            }
+        }
+        else
+        {
+            // Fallback to static fields if no per-generation results collected
+            champPieces = CarController.LastChampionPieces;
+            champWallHits = CarController.LastChampionWallHits;
+        }
+
+        Debug.Log($"[Optimizer] Logging generation stats: gen={Generation}, bestFitness={Fitness}, pieces={champPieces}, wallHits={champWallHits}");
+
+        Logger.LogEpisode(
+            "NEAT",
+            (int)Generation,
+            champPieces,
+            champWallHits,
+            (float)Fitness,
+            fixedUpdateCount // Added fixed update count to log
+        );
+
+        // Clear results buffer for next generation
+        _evalResults.Clear();
     }
 
     void ea_PauseEvent(object sender, EventArgs e)
@@ -134,10 +187,7 @@ public class Optimizer : MonoBehaviour {
         DateTime endTime = DateTime.Now;
         Utility.Log("Total time elapsed: " + (endTime - startTime));
 
-        System.IO.StreamReader stream = new System.IO.StreamReader(popFileSavePath);
-       
-
-      
+        // (stream reading removed — not used)
         EARunning = false;        
         
     }
@@ -155,7 +205,8 @@ public class Optimizer : MonoBehaviour {
     {
         if (trackGenerator != null)
         {
-            trackGenerator.GenerateNewTrack();
+            int seed = SeedManager.GetSeedForEpisode((int)_ea.CurrentGeneration);
+            trackGenerator.GenerateTrack(seed);
         }
         GameObject obj = Instantiate(Unit, Unit.transform.position, Unit.transform.rotation) as GameObject;
         UnitController controller = obj.GetComponent<UnitController>();
@@ -169,6 +220,29 @@ public class Optimizer : MonoBehaviour {
     {
         UnitController ct = ControllerMap[box];
 
+        // Record final stats for this evaluation before destroying the GameObject
+        try
+        {
+            float fit = ct.GetFitness();
+            int pieces = 0;
+            int wallHits = 0;
+            // If this controller is a CarController, retrieve the extra stats
+            CarController carCt = ct as CarController;
+            if(carCt != null)
+            {
+                pieces = carCt.GetPieces();
+                wallHits = carCt.GetWallHits();
+            }
+            _evalResults.Add(new EvalResult { fitness = fit, pieces = pieces, wallHits = wallHits });
+            Debug.Log($"[Optimizer] Eval recorded: fitness={fit}, pieces={pieces}, wallHits={wallHits}");
+        }
+        catch (Exception ex)
+        {
+            Debug.LogWarning("Failed to record eval stats: " + ex.Message);
+        }
+
+        // Remove mapping and destroy controller
+        ControllerMap.Remove(box);
         Destroy(ct.gameObject);
     }
 
@@ -321,4 +395,13 @@ public class Optimizer : MonoBehaviour {
 
         GUI.Button(new Rect(10, Screen.height - 70, 100, 60), string.Format("Generation: {0}\nFitness: {1:0.00}", Generation, Fitness));
     }
+    
+    public UnitController GetController(IBlackBox box)
+    {
+        if (ControllerMap.ContainsKey(box))
+            return ControllerMap[box];
+
+        return null;
+    }
 }
+

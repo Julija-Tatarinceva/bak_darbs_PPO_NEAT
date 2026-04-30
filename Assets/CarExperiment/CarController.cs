@@ -14,6 +14,13 @@ public class CarController : UnitController {
     int WallHits; 
     IBlackBox box;
     private float startTime;
+    
+    // Static variables to persist stats across controller destruction
+    public static int LastChampionPieces = 0;
+    public static int LastChampionWallHits = 0;
+    
+    public int GetPieces() => CurrentPiece;
+    public int GetWallHits() => WallHits;
 
 	// Use this for initialization
 	void Start () {
@@ -153,32 +160,44 @@ public class CarController : UnitController {
             fit += 100f / Mathf.Max(timeTaken, 0.1f);
         }
         Debug.Log($"Fitness: {fit}, Piece: {CurrentPiece}, Lap: {Lap}, WallHits: {WallHits}, Time: {Time.time - startTime}");
+        
+        // Save stats to static variables before controller is destroyed
+        LastChampionPieces = CurrentPiece;
+        LastChampionWallHits = WallHits;
+        
         return Mathf.Max(0, fit);
     }
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.collider.tag.Equals("Road"))
+        if (collision.collider.CompareTag("Road"))
         {
-            RoadPiece rp = collision.collider.GetComponent<RoadPiece>();
-            if ((rp.PieceNumber != LastPiece) && (rp.PieceNumber == CurrentPiece + 1 || (MovingForward && rp.PieceNumber == 0)))
+            RoadPiece rp = collision.collider.GetComponentInParent<RoadPiece>();
+            if (rp != null)
             {
-                LastPiece = CurrentPiece;
-                CurrentPiece = rp.PieceNumber;
-                MovingForward = true;
-                Debug.Log($"[NEAT] Rewarded: Visited new piece {CurrentPiece}, LastPiece: {LastPiece}");
+                if ((rp.PieceNumber != LastPiece) && (rp.PieceNumber == CurrentPiece + 1 || (MovingForward && rp.PieceNumber == 0)))
+                {
+                    LastPiece = CurrentPiece;
+                    CurrentPiece = rp.PieceNumber;
+                    MovingForward = true;
+                    Debug.Log($"[NEAT] Rewarded: Visited new piece {CurrentPiece}, LastPiece: {LastPiece}");
+                }
+                else
+                {
+                    MovingForward = false;
+                    Debug.Log($"[NEAT] Penalized: Revisited or wrong piece {rp.PieceNumber}, CurrentPiece: {CurrentPiece}, LastPiece: {LastPiece}");
+                }
+                if (rp.PieceNumber == 0)
+                {
+                    CurrentPiece = 0;
+                }
             }
             else
             {
-                MovingForward = false;
-                Debug.Log($"[NEAT] Penalized: Revisited or wrong piece {rp.PieceNumber}, CurrentPiece: {CurrentPiece}, LastPiece: {LastPiece}");
-            }
-            if (rp.PieceNumber == 0)
-            {
-                CurrentPiece = 0;
+                Debug.LogWarning($"[NEAT] Road collision detected but RoadPiece component not found on {collision.collider.name}");
             }
         }
-        else if (collision.collider.tag.Equals("Wall"))
+        else if (collision.collider.CompareTag("Wall"))
         {
             WallHits++;
             Debug.Log($"[NEAT] Penalized: Wall hit! Total: {WallHits}");

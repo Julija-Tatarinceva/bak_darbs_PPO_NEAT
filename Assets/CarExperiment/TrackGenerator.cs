@@ -94,23 +94,32 @@ namespace CarExperiment
         {
             currentTrackPieces = new List<GameObject>();
             currentWallPieces = new List<GameObject>();
-            GenerateNewTrack();
+            GenerateTrack(Random.Range(0, 1000000));;
         }
 
         /// <summary>
         /// Generates a new procedural track. Call this at the start of each NEAT generation or PPO episode.
         /// </summary>
-        public void GenerateNewTrack()
+        /// 
+        public void GenerateTrack(int externalSeed)
+        {
+            // Force deterministic generation
+            Random.InitState(externalSeed);
+
+            GenerateNewTrackWithSeed();
+        }
+        
+        public void GenerateNewTrackWithSeed()
         {
 
             ClearTrack();
             generationCount++;
 
             // Set random seed for reproducibility if specified
-            if (seed != 0)
-            {
-                Random.InitState(seed + generationCount);
-            }
+            // if (seed != 0)
+            // {
+            //     Random.InitState(seed + generationCount);
+            // }
 
             List<TrackGenerator.PieceInfo> pieces = new List<TrackGenerator.PieceInfo>();
             bool generationSuccessful = false;
@@ -136,7 +145,7 @@ namespace CarExperiment
                         // Intersection check and piece selection
                         PieceType selected = nextType;
                         // Try types in this order: desired, straight, left, right
-                        PieceType[] attemptTypes = { nextType, PieceType.Straight, PieceType.Turn45Left, PieceType.Turn45Right };
+                        PieceType[] attemptTypes = { nextType, PieceType.Straight, PieceType.Turn45Left, PieceType.Turn45Right, PieceType.Turn90Left, PieceType.Turn90Right };
                         bool foundValidPiece = false;
 
                         foreach (PieceType attempt in attemptTypes)
@@ -217,6 +226,18 @@ namespace CarExperiment
                             stats.Turn45Count++;
                             stats.TotalTurnAngle += 45f;
                             break;
+                        case PieceType.Turn90Left:
+                            piece = Instantiate(turn45Piece, info.Pos, info.Rot, transform);
+                            piece.name = $"Turn90L_Piece_{i}";
+                            stats.Turn45Count++;
+                            stats.TotalTurnAngle += 90f;
+                            break;
+                        case PieceType.Turn90Right:
+                            piece = Instantiate(turn45Piece, info.Pos, info.Rot, transform);
+                            piece.name = $"Turn90R_Piece_{i}";
+                            stats.Turn45Count++;
+                            stats.TotalTurnAngle += 90f;
+                            break;
                         default:
                             piece = Instantiate(straightPiece, info.Pos, info.Rot, transform);
                             piece.name = $"Default_Piece_{i}";
@@ -260,6 +281,12 @@ namespace CarExperiment
                     if (pieces[i + 1].Type == PieceType.Turn45Right)
                         wallEndR = wallEndR - exitRot * (Vector3.forward * wallEndInset);
 
+                    if (pieces[i + 1].Type == PieceType.Turn90Left)
+                        wallEndL = wallEndL - exitRot * (Vector3.forward * wallEndInset * 2f);
+
+                    if (pieces[i + 1].Type == PieceType.Turn90Right)
+                        wallEndR = wallEndR - exitRot * (Vector3.forward * wallEndInset * 2f);
+
                     // Trim the INNER side before a turn, and save that trimmed point
                     // so the turn piece's inner wall can start exactly from there
                     // if (pieces[i + 1].Type == PieceType.Turn45Left)
@@ -302,6 +329,18 @@ namespace CarExperiment
                 rot *= Quaternion.Euler(0, 45, 0);
                 pos += rot * (Vector3.right * 0.78641f + -Vector3.forward * 1.66428f);
             }
+            else if (type == PieceType.Turn90Left)
+            {
+                rot *= Quaternion.Euler(0, -90, 0);
+                // For 90-degree turns, the offset is purely lateral and forward
+                pos += rot * (-Vector3.right * 2f + -Vector3.forward * 2f);
+            }
+            else if (type == PieceType.Turn90Right)
+            {
+                rot *= Quaternion.Euler(0, 90, 0);
+                // For 90-degree turns, the offset is purely lateral and forward
+                pos += rot * (Vector3.right * 2f + -Vector3.forward * 2f);
+            }
             pos += rot * Vector3.forward * pieceLength;
             return pos;
         }
@@ -316,6 +355,14 @@ namespace CarExperiment
             else if (type == PieceType.Turn45Right)
             {
                 rot *= Quaternion.Euler(0, 45, 0);
+            }
+            else if (type == PieceType.Turn90Left)
+            {
+                rot *= Quaternion.Euler(0, -90, 0);
+            }
+            else if (type == PieceType.Turn90Right)
+            {
+                rot *= Quaternion.Euler(0, 90, 0);
             }
             return rot;
         }
@@ -335,9 +382,18 @@ namespace CarExperiment
             }
             else
             {
-                // Only 45 degree turns
+                // Choose between 45-degree and 90-degree turns based on sharpTurnProbability
+                bool useSharpTurn = Random.value < sharpTurnProbability;
                 bool turnLeft = Random.value < 0.5f;
-                return turnLeft ? PieceType.Turn45Left : PieceType.Turn45Right;
+                
+                if (useSharpTurn)
+                {
+                    return turnLeft ? PieceType.Turn90Left : PieceType.Turn90Right;
+                }
+                else
+                {
+                    return turnLeft ? PieceType.Turn45Left : PieceType.Turn45Right;
+                }
             }
         }
 
@@ -418,7 +474,7 @@ namespace CarExperiment
         private void PlaceWall(Vector3 start, Vector3 end, string wallName, float thickness)
         {
             Vector3 diff = end - start;
-            Debug.Log(end + " - " + start + " = " + diff);
+            //Debug.Log(end + " - " + start + " = " + diff);
             float dist = diff.magnitude;
             if (dist < 0.001f) return;
 
@@ -439,7 +495,9 @@ namespace CarExperiment
         {
             Straight,
             Turn45Left,
-            Turn45Right
+            Turn45Right,
+            Turn90Left,
+            Turn90Right
         }
     }
 }
