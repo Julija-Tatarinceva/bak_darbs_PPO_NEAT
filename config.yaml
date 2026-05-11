@@ -11,19 +11,21 @@ behaviors:
       num_epoch: 3
       learning_rate_schedule: linear
     network_settings:
-      normalize: false
-      hidden_units: 128
-      num_layers: 2
+      normalize: true
+      hidden_units: 32
+      num_layers: 1
     reward_signals:
       extrinsic:
         gamma: 0.99
         strength: 1.0
     max_steps: 6100000
     time_horizon: 64
-    summary_freq: 10000
+    summary_freq: 1000
 
-
-
+engine_settings:
+  time_scale: 20
+  no_graphics: true
+    
 # behaviors:
 #   ObserverAgent:
 #     trainer_type: ppo

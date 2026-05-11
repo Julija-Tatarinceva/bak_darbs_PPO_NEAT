@@ -35,6 +35,7 @@ public class PPOCarController : Agent
 
     void Start()
     {
+        Time.timeScale = 50f; // Speed up training 200x
         rb = GetComponent<Rigidbody>();
         startPosition = transform.position;
         startRotation = transform.rotation;
@@ -113,7 +114,7 @@ public class PPOCarController : Agent
         textGO.transform.SetParent(uiCanvas.transform, false);
 
         pieceDisplay = textGO.AddComponent<Text>();
-        pieceDisplay.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+        pieceDisplay.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
         pieceDisplay.fontSize = 40;
         pieceDisplay.fontStyle = FontStyle.Bold;
         pieceDisplay.alignment = TextAnchor.UpperRight;
@@ -238,9 +239,8 @@ public class PPOCarController : Agent
 
     public override void OnActionReceived(ActionBuffers actions)
     {
-        float steer = actions.ContinuousActions[0] * 2 - 1; // -1 to 1
-        float gas = actions.ContinuousActions[1];   // 0 to 1
-        //for last only: float gas = actions.ContinuousActions[1] * 0.5f + 0.5f; // 0 to 1
+        float steer = actions.ContinuousActions[0] * 2 - 1; // -1 to 1 (steering: left to right)
+        float gas = Mathf.Clamp01(actions.ContinuousActions[1]); // 0 to 1 directly (no backward movement)
 
         float moveDist = gas * Speed * Time.deltaTime;
         float turnAngle = steer * TurnSpeed * Time.deltaTime * gas;

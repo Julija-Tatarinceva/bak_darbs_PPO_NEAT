@@ -3069,6 +3069,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5400000, guid: bc8a6ba9c509b6c4b9bd2b715060d813, type: 3}
+      propertyPath: m_Constraints
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 1306224377846004890, guid: bc8a6ba9c509b6c4b9bd2b715060d813, type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 5022602860645237092, guid: 53bdfcb1506a4e545873be35239aa9c2, type: 3}
     - target: {fileID: 1306224377846004890, guid: bc8a6ba9c509b6c4b9bd2b715060d813, type: 3}
       propertyPath: m_BehaviorName
       value: Car
