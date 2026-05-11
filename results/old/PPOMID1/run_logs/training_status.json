@@ -1,0 +1,65 @@
+{
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "1.13.1+cpu"
+    },
+    "Car": {
+        "checkpoints": [
+            {
+                "steps": 3999992,
+                "file_path": "results\\PPOMID1\\Car\\Car-3999992.onnx",
+                "reward": 2.49940427801185,
+                "creation_time": 1776777305.9814003,
+                "auxillary_file_paths": [
+                    "results\\PPOMID1\\Car\\Car-3999992.pt"
+                ]
+            },
+            {
+                "steps": 4499992,
+                "file_path": "results\\PPOMID1\\Car\\Car-4499992.onnx",
+                "reward": 3.7407950607804668,
+                "creation_time": 1776783477.4669747,
+                "auxillary_file_paths": [
+                    "results\\PPOMID1\\Car\\Car-4499992.pt"
+                ]
+            },
+            {
+                "steps": 4999992,
+                "file_path": "results\\PPOMID1\\Car\\Car-4999992.onnx",
+                "reward": 1.6188553827689218,
+                "creation_time": 1776789506.8834705,
+                "auxillary_file_paths": [
+                    "results\\PPOMID1\\Car\\Car-4999992.pt"
+                ]
+            },
+            {
+                "steps": 5148728,
+                "file_path": "results\\PPOMID1\\Car\\Car-5148728.onnx",
+                "reward": 3.6131879198671446,
+                "creation_time": 1776795345.072971,
+                "auxillary_file_paths": [
+                    "results\\PPOMID1\\Car\\Car-5148728.pt"
+                ]
+            },
+            {
+                "steps": 5247857,
+                "file_path": "results\\PPOMID1\\Car\\Car-5247857.onnx",
+                "reward": 3.4688820502725517,
+                "creation_time": 1776797243.8329806,
+                "auxillary_file_paths": [
+                    "results\\PPOMID1\\Car\\Car-5247857.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 5247857,
+            "file_path": "results\\PPOMID1\\Car.onnx",
+            "reward": 3.4688820502725517,
+            "creation_time": 1776797243.8329806,
+            "auxillary_file_paths": [
+                "results\\PPOMID1\\Car\\Car-5247857.pt"
+            ]
+        }
+    }
+}

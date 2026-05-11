@@ -102,7 +102,7 @@ public class Optimizer : MonoBehaviour {
         _ea.UpdateEvent += new EventHandler(ea_UpdateEvent);
         _ea.PausedEvent += new EventHandler(ea_PauseEvent);
 
-        var evoSpeed = 1;
+        var evoSpeed = 4;
 
      //   Time.fixedDeltaTime = 0.045f;
         Time.timeScale = evoSpeed;       
@@ -117,6 +117,7 @@ public class Optimizer : MonoBehaviour {
 
         Fitness = _ea.Statistics._maxFitness;
         Generation = _ea.CurrentGeneration;
+        if(Generation==500) StopEA();
         // Determine the evaluated phenome with highest fitness this generation (if we have results)
         int champPieces = 0;
         int champWallHits = 0;

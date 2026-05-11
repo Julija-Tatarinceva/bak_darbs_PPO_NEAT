@@ -15,6 +15,7 @@ public static class Logger {
         int networkSize = 0 // Optional for PPO
     )
     {
+        Debug.Log($"Logging episode {episode} for method {method} with pieces: {pieces}, wall hits: {wallHits}, reward: {reward}");
         if (_currentFileName == null)
         {
             _currentFileName = GenerateFileName(method, networkSize);

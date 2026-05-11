@@ -1,0 +1,42 @@
+{
+    "name": "root",
+    "metadata": {
+        "timer_format_version": "0.1.0",
+        "start_time_seconds": "1777911528",
+        "python_version": "3.9.13 (tags/v3.9.13:6de2ca5, May 17 2022, 16:36:42) [MSC v.1929 64 bit (AMD64)]",
+        "command_line_arguments": "C:\\Users\\juuli\\AppData\\Local\\Programs\\Python\\Python39\\lib\\site-packages\\mlagents\\trainers\\learn.py config.yaml --run-id=PPO_TEST1",
+        "mlagents_version": "0.30.0",
+        "mlagents_envs_version": "0.30.0",
+        "communication_protocol_version": "1.5.0",
+        "pytorch_version": "1.13.1+cpu",
+        "numpy_version": "1.21.2",
+        "end_time_seconds": "1777911588"
+    },
+    "total": 61.445982,
+    "count": 1,
+    "self": 0.01510470000000197,
+    "children": {
+        "run_training.setup": {
+            "total": 0.1165429,
+            "count": 1,
+            "self": 0.1165429
+        },
+        "TrainerController.start_learning": {
+            "total": 61.3143344,
+            "count": 1,
+            "self": 0.00028139999999865495,
+            "children": {
+                "TrainerController._reset_env": {
+                    "total": 61.3139393,
+                    "count": 1,
+                    "self": 61.3139393
+                },
+                "TrainerController._save_models": {
+                    "total": 0.00011369999999999436,
+                    "count": 1,
+                    "self": 0.00011369999999999436
+                }
+            }
+        }
+    }
+}

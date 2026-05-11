@@ -1,0 +1,65 @@
+{
+    "Car": {
+        "checkpoints": [
+            {
+                "steps": 34183,
+                "file_path": "results\\TestPPO3\\Car\\Car-34183.onnx",
+                "reward": -2.918357964605093,
+                "creation_time": 1776532621.8223464,
+                "auxillary_file_paths": [
+                    "results\\TestPPO3\\Car\\Car-34183.pt"
+                ]
+            },
+            {
+                "steps": 61974,
+                "file_path": "results\\TestPPO3\\Car\\Car-61974.onnx",
+                "reward": -3.4833273525453277,
+                "creation_time": 1776532920.232129,
+                "auxillary_file_paths": [
+                    "results\\TestPPO3\\Car\\Car-61974.pt"
+                ]
+            },
+            {
+                "steps": 159957,
+                "file_path": "results\\TestPPO3\\Car\\Car-159957.onnx",
+                "reward": -1.0501928302858556,
+                "creation_time": 1776533626.3355598,
+                "auxillary_file_paths": [
+                    "results\\TestPPO3\\Car\\Car-159957.pt"
+                ]
+            },
+            {
+                "steps": 210419,
+                "file_path": "results\\TestPPO3\\Car\\Car-210419.onnx",
+                "reward": -1.0410114079713821,
+                "creation_time": 1776534031.0488946,
+                "auxillary_file_paths": [
+                    "results\\TestPPO3\\Car\\Car-210419.pt"
+                ]
+            },
+            {
+                "steps": 228347,
+                "file_path": "results\\TestPPO3\\Car\\Car-228347.onnx",
+                "reward": -1.0674565764830302,
+                "creation_time": 1776534247.190986,
+                "auxillary_file_paths": [
+                    "results\\TestPPO3\\Car\\Car-228347.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 228347,
+            "file_path": "results\\TestPPO3\\Car.onnx",
+            "reward": -1.0674565764830302,
+            "creation_time": 1776534247.190986,
+            "auxillary_file_paths": [
+                "results\\TestPPO3\\Car\\Car-228347.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "1.13.1+cpu"
+    }
+}

@@ -1,0 +1,65 @@
+{
+    "Car": {
+        "checkpoints": [
+            {
+                "steps": 7062910,
+                "file_path": "results\\PPOMID1.1\\Car\\Car-7062910.onnx",
+                "reward": 3.0895553335547445,
+                "creation_time": 1777196733.5660846,
+                "auxillary_file_paths": [
+                    "results\\PPOMID1.1\\Car\\Car-7062910.pt"
+                ]
+            },
+            {
+                "steps": 7499974,
+                "file_path": "results\\PPOMID1.1\\Car\\Car-7499974.onnx",
+                "reward": 4.485073064640164,
+                "creation_time": 1777203583.9791286,
+                "auxillary_file_paths": [
+                    "results\\PPOMID1.1\\Car\\Car-7499974.pt"
+                ]
+            },
+            {
+                "steps": 7999965,
+                "file_path": "results\\PPOMID1.1\\Car\\Car-7999965.onnx",
+                "reward": 3.4065364032451595,
+                "creation_time": 1777208190.2666674,
+                "auxillary_file_paths": [
+                    "results\\PPOMID1.1\\Car\\Car-7999965.pt"
+                ]
+            },
+            {
+                "steps": 8499965,
+                "file_path": "results\\PPOMID1.1\\Car\\Car-8499965.onnx",
+                "reward": 3.907686212286353,
+                "creation_time": 1777212647.7191145,
+                "auxillary_file_paths": [
+                    "results\\PPOMID1.1\\Car\\Car-8499965.pt"
+                ]
+            },
+            {
+                "steps": 8634101,
+                "file_path": "results\\PPOMID1.1\\Car\\Car-8634101.onnx",
+                "reward": 3.923205900937319,
+                "creation_time": 1777213879.7552025,
+                "auxillary_file_paths": [
+                    "results\\PPOMID1.1\\Car\\Car-8634101.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 8634101,
+            "file_path": "results\\PPOMID1.1\\Car.onnx",
+            "reward": 3.923205900937319,
+            "creation_time": 1777213879.7552025,
+            "auxillary_file_paths": [
+                "results\\PPOMID1.1\\Car\\Car-8634101.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "1.13.1+cpu"
+    }
+}

@@ -1,5 +1,5 @@
 behaviors:
-  My Behavior:  # Replace with your exact Behavior Name if different
+  Car:  # Replace with your exact Behavior Name if different
     trainer_type: ppo
     hyperparameters:
       batch_size: 1024
@@ -18,7 +18,7 @@ behaviors:
       extrinsic:
         gamma: 0.99
         strength: 1.0
-    max_steps: 500000
+    max_steps: 6100000
     time_horizon: 64
     summary_freq: 10000
 

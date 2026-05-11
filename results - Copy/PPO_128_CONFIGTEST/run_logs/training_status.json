@@ -1,0 +1,65 @@
+{
+    "Car": {
+        "checkpoints": [
+            {
+                "steps": 10499938,
+                "file_path": "results\\PPO_128_CONFIGTEST\\Car\\Car-10499938.onnx",
+                "reward": 8.083333319673935,
+                "creation_time": 1777984965.0876925,
+                "auxillary_file_paths": [
+                    "results\\PPO_128_CONFIGTEST\\Car\\Car-10499938.pt"
+                ]
+            },
+            {
+                "steps": 10999878,
+                "file_path": "results\\PPO_128_CONFIGTEST\\Car\\Car-10999878.onnx",
+                "reward": 8.450746259137766,
+                "creation_time": 1777987084.7311635,
+                "auxillary_file_paths": [
+                    "results\\PPO_128_CONFIGTEST\\Car\\Car-10999878.pt"
+                ]
+            },
+            {
+                "steps": 11499990,
+                "file_path": "results\\PPO_128_CONFIGTEST\\Car\\Car-11499990.onnx",
+                "reward": 10.263636340471832,
+                "creation_time": 1777989190.8605018,
+                "auxillary_file_paths": [
+                    "results\\PPO_128_CONFIGTEST\\Car\\Car-11499990.pt"
+                ]
+            },
+            {
+                "steps": 11999929,
+                "file_path": "results\\PPO_128_CONFIGTEST\\Car\\Car-11999929.onnx",
+                "reward": 6.852631576751408,
+                "creation_time": 1777991294.6086326,
+                "auxillary_file_paths": [
+                    "results\\PPO_128_CONFIGTEST\\Car\\Car-11999929.pt"
+                ]
+            },
+            {
+                "steps": 12446313,
+                "file_path": "results\\PPO_128_CONFIGTEST\\Car\\Car-12446313.onnx",
+                "reward": 9.277777751286825,
+                "creation_time": 1777993180.8629408,
+                "auxillary_file_paths": [
+                    "results\\PPO_128_CONFIGTEST\\Car\\Car-12446313.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 12446313,
+            "file_path": "results\\PPO_128_CONFIGTEST\\Car.onnx",
+            "reward": 9.277777751286825,
+            "creation_time": 1777993180.8629408,
+            "auxillary_file_paths": [
+                "results\\PPO_128_CONFIGTEST\\Car\\Car-12446313.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "1.13.1+cpu"
+    }
+}

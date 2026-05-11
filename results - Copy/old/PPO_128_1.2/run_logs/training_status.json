@@ -1,0 +1,20 @@
+{
+    "Car": {
+        "checkpoints": [
+            {
+                "steps": 499992,
+                "file_path": "results\\PPO_128_1.2\\Car\\Car-499992.onnx",
+                "reward": 2.88333333366447,
+                "creation_time": 1777903537.5056195,
+                "auxillary_file_paths": [
+                    "results\\PPO_128_1.2\\Car\\Car-499992.pt"
+                ]
+            }
+        ]
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "1.13.1+cpu"
+    }
+}

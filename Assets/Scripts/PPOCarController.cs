@@ -3,6 +3,7 @@ using UnityEngine;
 using Unity.MLAgents;
 using Unity.MLAgents.Sensors;
 using Unity.MLAgents.Actuators;
+using UnityEngine.UI;
 
 public class PPOCarController : Agent
 {
@@ -19,6 +20,10 @@ public class PPOCarController : Agent
     private Vector3 startPosition;
     private Quaternion startRotation;
     private TrackGenerator trackGenerator;
+    
+    // UI elements for piece display
+    private Text pieceDisplay;
+    private Canvas uiCanvas;
 
     // --- Add these member variables ---
     private Vector3[] lastRayOrigins = new Vector3[5];
@@ -33,6 +38,9 @@ public class PPOCarController : Agent
         rb = GetComponent<Rigidbody>();
         startPosition = transform.position;
         startRotation = transform.rotation;
+        
+        // Create UI for piece display
+        CreatePieceDisplay();
     }
 
     public override void OnEpisodeBegin()
@@ -46,7 +54,7 @@ public class PPOCarController : Agent
             episodeCount++,
             currentPiece,
             wallHits,
-            GetCumulativeReward(),
+            (currentPiece-1) * 1f - wallHits * 0.2f,
             fixedUpdateCount
         );
 
@@ -78,6 +86,60 @@ public class PPOCarController : Agent
         goalReached = false;
 
         Debug.Log("PPO Episode started");
+        
+        // Update UI display
+        UpdatePieceDisplay();
+    }
+
+    private void CreatePieceDisplay()
+    {
+        // Find or create canvas
+        uiCanvas = FindObjectOfType<Canvas>();
+        if (uiCanvas == null)
+        {
+            GameObject canvasGO = new GameObject("PieceDisplayCanvas");
+            uiCanvas = canvasGO.AddComponent<Canvas>();
+            uiCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            
+            CanvasScaler scaler = canvasGO.AddComponent<CanvasScaler>();
+            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            scaler.referenceResolution = new Vector2(1920, 1080);
+            
+            GraphicRaycaster raycaster = canvasGO.AddComponent<GraphicRaycaster>();
+        }
+
+        // Create text element for piece display
+        GameObject textGO = new GameObject("PieceDisplayText");
+        textGO.transform.SetParent(uiCanvas.transform, false);
+
+        pieceDisplay = textGO.AddComponent<Text>();
+        pieceDisplay.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+        pieceDisplay.fontSize = 40;
+        pieceDisplay.fontStyle = FontStyle.Bold;
+        pieceDisplay.alignment = TextAnchor.UpperRight;
+        pieceDisplay.text = "Piece: 0";
+        pieceDisplay.color = Color.white;
+
+        // Add outline for better visibility
+        Outline outline = textGO.AddComponent<Outline>();
+        outline.effectColor = Color.black;
+        outline.effectDistance = new Vector2(2, -2);
+
+        // Set position to upper right corner
+        RectTransform rectTransform = textGO.GetComponent<RectTransform>();
+        rectTransform.anchorMin = new Vector2(1, 1);
+        rectTransform.anchorMax = new Vector2(1, 1);
+        rectTransform.pivot = new Vector2(1, 1);
+        rectTransform.anchoredPosition = new Vector2(-20, -20);
+        rectTransform.sizeDelta = new Vector2(400, 100);
+    }
+
+    private void UpdatePieceDisplay()
+    {
+        if (pieceDisplay != null)
+        {
+            pieceDisplay.text = $"Piece: {currentPiece}";
+        }
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -88,7 +150,6 @@ public class PPOCarController : Agent
         float leftSensor = 0;
         float rightFrontSensor = 0;
         float rightSensor = 0;
-        float rightSensorNew = 0; // New sensor for PPO
 
         RaycastHit hit;
         Vector3 origin = transform.position + transform.forward * 1.1f;
@@ -173,13 +234,13 @@ public class PPOCarController : Agent
         sensor.AddObservation(leftSensor);
         sensor.AddObservation(rightFrontSensor);
         sensor.AddObservation(rightSensor);
-        sensor.AddObservation(rightSensorNew);
     }
 
     public override void OnActionReceived(ActionBuffers actions)
     {
         float steer = actions.ContinuousActions[0] * 2 - 1; // -1 to 1
         float gas = actions.ContinuousActions[1];   // 0 to 1
+        //for last only: float gas = actions.ContinuousActions[1] * 0.5f + 0.5f; // 0 to 1
 
         float moveDist = gas * Speed * Time.deltaTime;
         float turnAngle = steer * TurnSpeed * Time.deltaTime * gas;
@@ -207,11 +268,26 @@ public class PPOCarController : Agent
                 lastPiece = currentPiece;
                 currentPiece = rp.PieceNumber;
                 AddReward(1f); // Reward for reaching next piece
+                UpdatePieceDisplay(); // Update UI
                 //Debug.Log($"PPO Piece reached: {CurrentPiece}");
+            }
+            else if (rp.PieceNumber > currentPiece && rp.PieceNumber != lastPiece)
+            {
+                // RECOVERY: Car skipped pieces - track furthest progress
+                Debug.LogWarning($"[PPO] ⚠ SKIPPED from {currentPiece} to {rp.PieceNumber}");
+                lastPiece = currentPiece;
+                currentPiece = rp.PieceNumber;
+                AddReward(1f);
+                UpdatePieceDisplay();
+            }
+            else
+            {
+                Debug.Log($"[PPO] Ignored piece {rp.PieceNumber} (not in sequence)");
             }
             if (rp != null && rp.PieceNumber == 0 && currentPiece > 0)
             {
                 currentPiece = 0;
+                UpdatePieceDisplay(); // Update UI
             }
         }
         else if (collision.collider.CompareTag("Wall"))
@@ -233,11 +309,13 @@ public class PPOCarController : Agent
                 lastPiece = currentPiece;
                 currentPiece = rp.PieceNumber;
                 AddReward(1f); // Reward for reaching next piece
+                UpdatePieceDisplay(); // Update UI
                 //Debug.Log($"PPO Piece reached: {CurrentPiece}");
             }
             if (rp != null && rp.PieceNumber == 0 && currentPiece > 0)
             {
                 currentPiece = 0;
+                UpdatePieceDisplay(); // Update UI
             }
         }
         else if (other.CompareTag("Wall"))
