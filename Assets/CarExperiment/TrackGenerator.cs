@@ -1,10 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-/// <summary>
-/// Procedurally generates race tracks with configurable difficulty.
-/// Ensures consistent training across NEAT generations and PPO episodes.
-/// </summary>
 namespace CarExperiment
 {
     public class TrackGenerator : MonoBehaviour
@@ -44,9 +40,6 @@ namespace CarExperiment
 
         [Header("Track Appearance")] [Tooltip("Width of each road piece")]
         public float pieceLength = 2f;
-
-        [Tooltip("Number of wall segments to use on turns to follow curvature")]
-        public int wallSegmentsPerTurn = 8;
 
         [Tooltip("Thickness of the wall (X scale contribution)")]
         public float wallThickness = 0.05f;
@@ -96,11 +89,6 @@ namespace CarExperiment
             currentWallPieces = new List<GameObject>();
             GenerateTrack(Random.Range(0, 1000000));;
         }
-
-        /// <summary>
-        /// Generates a new procedural track. Call this at the start of each NEAT generation or PPO episode.
-        /// </summary>
-        /// 
         public void GenerateTrack(int externalSeed)
         {
             // Force deterministic generation
@@ -114,12 +102,6 @@ namespace CarExperiment
 
             ClearTrack();
             generationCount++;
-
-            // Set random seed for reproducibility if specified
-            // if (seed != 0)
-            // {
-            //     Random.InitState(seed + generationCount);
-            // }
 
             List<TrackGenerator.PieceInfo> pieces = new List<TrackGenerator.PieceInfo>();
             bool generationSuccessful = false;
@@ -248,7 +230,7 @@ namespace CarExperiment
 
                 currentTrackPieces.Add(piece);
 
-                // Set PieceNumber for road pieces (not goal)
+                // Set PieceNumber for road pieces
                 if (i < trackLength - 1)
                 {
                     RoadPiece rp = piece.GetComponentInChildren<RoadPiece>();
@@ -287,14 +269,6 @@ namespace CarExperiment
                     if (pieces[i + 1].Type == PieceType.Turn90Right)
                         wallEndR = wallEndR - exitRot * (Vector3.forward * wallEndInset * 2f);
 
-                    // Trim the INNER side before a turn, and save that trimmed point
-                    // so the turn piece's inner wall can start exactly from there
-                    // if (pieces[i + 1].Type == PieceType.Turn45Left)
-                    //     wallEndL = wallEndL - info.Rot * (Vector3.forward * wallEndInset);
-                    //
-                    // if (pieces[i + 1].Type == PieceType.Turn45Right)
-                    //     wallEndR = wallEndR - info.Rot * (Vector3.forward * wallEndInset);
-
                     lastWallEndL = wallEndL;
                     lastWallEndR = wallEndR;
 
@@ -311,8 +285,6 @@ namespace CarExperiment
                     }
                 }
             }
-
-            // Removed stray currentWallPieces.Add(wall); which was outside any function and caused errors.
         }
 
         private Vector3 GetNextPosition(Vector3 startPos, Quaternion startRot, PieceType type)
@@ -366,55 +338,36 @@ namespace CarExperiment
             }
             return rot;
         }
-
-        /// <summary>
-        /// Selects a piece type based on current difficulty and previous piece orientation.
-        /// </summary>
+        
         private PieceType SelectPieceType(float currentDifficulty)
         {
             float roll = Random.value;
-
-            // At low difficulty, mostly straight pieces
-            // At high difficulty, more turns
+            
             if (roll > currentDifficulty)
             {
                 return PieceType.Straight;
             }
-            else
-            {
-                // Choose between 45-degree and 90-degree turns based on sharpTurnProbability
-                bool useSharpTurn = Random.value < sharpTurnProbability;
-                bool turnLeft = Random.value < 0.5f;
+            bool useSharpTurn = Random.value < sharpTurnProbability;
+            bool turnLeft = Random.value < 0.5f;
                 
-                if (useSharpTurn)
-                {
-                    return turnLeft ? PieceType.Turn90Left : PieceType.Turn90Right;
-                }
-                else
-                {
-                    return turnLeft ? PieceType.Turn45Left : PieceType.Turn45Right;
-                }
+            if (useSharpTurn)
+            {
+                return turnLeft ? PieceType.Turn90Left : PieceType.Turn90Right;
             }
+            return turnLeft ? PieceType.Turn45Left : PieceType.Turn45Right;
         }
-
-        /// <summary>
-        /// Calculates current difficulty based on curriculum settings.
-        /// </summary>
+        
         private float CalculateCurrentDifficulty()
         {
             if (!useCurriculum)
             {
                 return difficulty;
             }
-
-            // Gradually increase from startDifficulty to difficulty over curriculumSteps
+            
             float progress = Mathf.Min(generationCount / (float)curriculumSteps, 1f);
             return Mathf.Lerp(startDifficulty, difficulty, progress);
         }
-
-        /// <summary>
-        /// Clears the current track.
-        /// </summary>
+        
         private void ClearTrack()
         {
             foreach (GameObject piece in currentTrackPieces)
@@ -430,46 +383,37 @@ namespace CarExperiment
 
             currentWallPieces.Clear();
         }
-
-        /// <summary>
-        /// Gets statistics about the last generated track (for thesis analysis).
-        /// </summary>
+        
         public TrackStats GetLastTrackStats()
         {
             return lastTrackStats;
         }
-
-        /// <summary>
-        /// Gets the current generation/episode count.
-        /// </summary>
+        
         public int GetGenerationCount()
         {
             return generationCount;
         }
-
-        /// <summary>
-        /// Resets the generation counter (useful when switching between NEAT/PPO experiments).
-        /// </summary>
+        
         public void ResetGenerationCount()
         {
             generationCount = 0;
         }
 
-        void OnDrawGizmos()
-        {
-            // Visualize track in editor
-            if (currentTrackPieces.Count > 0)
-            {
-                Gizmos.color = Color.cyan;
-                for (int i = 0; i < currentTrackPieces.Count - 1; i++)
-                {
-                    Gizmos.DrawLine(
-                        currentTrackPieces[i].transform.position + Vector3.up * 0.5f,
-                        currentTrackPieces[i + 1].transform.position + Vector3.up * 0.5f
-                    );
-                }
-            }
-        }
+        // void OnDrawGizmos()
+        // {
+        //     // Visualize track in editor
+        //     if (currentTrackPieces.Count > 0)
+        //     {
+        //         Gizmos.color = Color.cyan;
+        //         for (int i = 0; i < currentTrackPieces.Count - 1; i++)
+        //         {
+        //             Gizmos.DrawLine(
+        //                 currentTrackPieces[i].transform.position + Vector3.up * 0.5f,
+        //                 currentTrackPieces[i + 1].transform.position + Vector3.up * 0.5f
+        //             );
+        //         }
+        //     }
+        // }
 
         private void PlaceWall(Vector3 start, Vector3 end, string wallName, float thickness)
         {

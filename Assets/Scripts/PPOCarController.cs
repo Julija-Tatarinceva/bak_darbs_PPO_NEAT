@@ -24,8 +24,7 @@ public class PPOCarController : Agent
     // UI elements for piece display
     private Text pieceDisplay;
     private Canvas uiCanvas;
-
-    // --- Add these member variables ---
+    
     private Vector3[] lastRayOrigins = new Vector3[5];
     private Vector3[] lastRayDirs = new Vector3[5];
     private float[] lastRayLengths = new float[5];
@@ -166,6 +165,9 @@ public class PPOCarController : Agent
             }
             frontRayLength = hit.distance;
         }
+        sensor.AddObservation(frontSensor);
+        
+        
         lastRayOrigins[0] = origin;
         lastRayDirs[0] = dirFront;
         lastRayLengths[0] = frontRayLength;
@@ -239,8 +241,8 @@ public class PPOCarController : Agent
 
     public override void OnActionReceived(ActionBuffers actions)
     {
-        float steer = actions.ContinuousActions[0] * 2 - 1; // -1 to 1 (steering: left to right)
-        float gas = Mathf.Clamp01(actions.ContinuousActions[1]); // 0 to 1 directly (no backward movement)
+        float steer = -(actions.ContinuousActions[0]);
+        float gas = Mathf.Clamp01(actions.ContinuousActions[1]);
 
         float moveDist = gas * Speed * Time.deltaTime;
         float turnAngle = steer * TurnSpeed * Time.deltaTime * gas;

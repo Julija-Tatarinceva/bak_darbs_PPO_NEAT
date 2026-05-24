@@ -21,39 +21,10 @@ public class CarController : UnitController {
     
     public int GetPieces() => CurrentPiece;
     public int GetWallHits() => WallHits;
-
-	// Use this for initialization
-	void Start () {
-	
-	}
 	
 	// Update is called once per frame
     void FixedUpdate()
     {
-        //grab the input axes
-        //var steer = Input.GetAxis("Horizontal");
-        //var gas = Input.GetAxis("Vertical");
-
-        ////if they're hittin' the gas...
-        //if (gas != 0)
-        //{
-        //    //take the throttle level (with keyboard, generally +1 if up, -1 if down)
-        //    //  and multiply by speed and the timestep to get the distance moved this frame
-        //    var moveDist = gas * speed * Time.deltaTime;
-
-        //    //now the turn amount, similar drill, just turnSpeed instead of speed
-        //    //   we multiply in gas as well, which properly reverses the steering when going 
-        //    //   backwards, and scales the turn amount with the speed
-        //    var turnAngle = steer * turnSpeed * Time.deltaTime * gas;
-
-        //    //now apply 'em, starting with the turn           
-        //    transform.Rotate(0, turnAngle, 0);
-
-        //    //and now move forward by moveVect
-        //    transform.Translate(Vector3.forward * moveDist);
-        //}
-
-        // Five sensors: Front, left front, left, right front, right 
 
         if (IsRunning)
         {
@@ -115,7 +86,7 @@ public class CarController : UnitController {
 
             ISignalArray outputArr = box.OutputSignalArray;
 
-            var steer = (float)outputArr[0] * 2 - 1;
+            var steer = -((float)outputArr[0] * 2 - 1);
             var gas = (float)outputArr[1] * 2 - 1;
 
             var moveDist = gas * Speed * Time.deltaTime;

@@ -1,4 +1,62 @@
 {
+    "Car": {
+        "checkpoints": [
+            {
+                "steps": 4499992,
+                "file_path": "results\\PPO_32_run_1\\Car\\Car-4499992.onnx",
+                "reward": 9.687500014901161,
+                "creation_time": 1778554029.793998,
+                "auxillary_file_paths": [
+                    "results\\PPO_32_run_1\\Car\\Car-4499992.pt"
+                ]
+            },
+            {
+                "steps": 4999992,
+                "file_path": "results\\PPO_32_run_1\\Car\\Car-4999992.onnx",
+                "reward": null,
+                "creation_time": 1778560114.1169221,
+                "auxillary_file_paths": [
+                    "results\\PPO_32_run_1\\Car\\Car-4999992.pt"
+                ]
+            },
+            {
+                "steps": 5499992,
+                "file_path": "results\\PPO_32_run_1\\Car\\Car-5499992.onnx",
+                "reward": 9.494444447259108,
+                "creation_time": 1778566178.0318143,
+                "auxillary_file_paths": [
+                    "results\\PPO_32_run_1\\Car\\Car-5499992.pt"
+                ]
+            },
+            {
+                "steps": 5999992,
+                "file_path": "results\\PPO_32_run_1\\Car\\Car-5999992.onnx",
+                "reward": 9.809523775464012,
+                "creation_time": 1778572246.7353354,
+                "auxillary_file_paths": [
+                    "results\\PPO_32_run_1\\Car\\Car-5999992.pt"
+                ]
+            },
+            {
+                "steps": 6100064,
+                "file_path": "results\\PPO_32_run_1\\Car\\Car-6100064.onnx",
+                "reward": 9.844444438815117,
+                "creation_time": 1778573471.7078533,
+                "auxillary_file_paths": [
+                    "results\\PPO_32_run_1\\Car\\Car-6100064.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 6100064,
+            "file_path": "results\\PPO_32_run_1\\Car.onnx",
+            "reward": 9.844444438815117,
+            "creation_time": 1778573471.7078533,
+            "auxillary_file_paths": [
+                "results\\PPO_32_run_1\\Car\\Car-6100064.pt"
+            ]
+        }
+    },
     "metadata": {
         "stats_format_version": "0.3.0",
         "mlagents_version": "0.30.0",

@@ -2645,7 +2645,7 @@ MonoBehaviour:
   goalPiece: {fileID: 951437409976906272, guid: 00784b57d0620154bb8d30c25834fc4f, type: 3}
   trackLength: 20
   maxGenerationAttempts: 10
-  difficulty: 1
+  difficulty: 0.5
   sharpTurnProbability: 0.3
   seed: 0
   useCurriculum: 0
@@ -3015,7 +3015,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100004, guid: bc8a6ba9c509b6c4b9bd2b715060d813, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: bc8a6ba9c509b6c4b9bd2b715060d813, type: 3}
       propertyPath: m_LocalScale.x

@@ -1,5 +1,5 @@
 behaviors:
-  Car:  # Replace with your exact Behavior Name if different
+  Car:
     trainer_type: ppo
     hyperparameters:
       batch_size: 1024
@@ -11,90 +11,17 @@ behaviors:
       num_epoch: 3
       learning_rate_schedule: linear
     network_settings:
-      normalize: true
-      hidden_units: 32
+      normalize: false
+      hidden_units: 10
       num_layers: 1
     reward_signals:
       extrinsic:
         gamma: 0.99
         strength: 1.0
-    max_steps: 6100000
+    max_steps: 6000000
     time_horizon: 64
     summary_freq: 1000
 
 engine_settings:
   time_scale: 20
   no_graphics: true
-    
-# behaviors:
-#   ObserverAgent:
-#     trainer_type: ppo
-#     hyperparameters:
-#       batch_size: 1024
-#       buffer_size: 10240
-#       learning_rate: 3.0e-4
-#     network_settings:
-#       hidden_units: 128
-#       num_layers: 2
-#     max_steps: 50000000
-#     time_horizon: 64
-#     summary_freq: 1000
-    
-#   NavigatorAgent:
-#     trainer_type: ppo
-#     hyperparameters:
-#       batch_size: 1024
-#       buffer_size: 10240
-#       learning_rate: 3.0e-4
-#     network_settings:
-#       hidden_units: 128
-#       num_layers: 2
-#     max_steps: 50000000
-#     time_horizon: 64
-#     summary_freq: 1000
-
-
-
-# behaviors:
-#   Walker:
-#     trainer_type: ppo
-#     hyperparameters:
-#       batch_size: 1024
-#       buffer_size: 20480
-#       learning_rate: 3.0e-4
-#       beta: 5.0e-3
-#       epsilon: 0.2
-#       #gamma: 0.99
-#       lambd: 0.95
-#     network_settings:
-#       num_layers: 2       # Small/Medium/Large
-#       hidden_units: 64    # Small/Medium/Large
-#       normalize: false
-#     reward_signals:
-#       extrinsic:
-#         gamma: 0.99
-#         strength: 1.0
-#     max_steps: 10000000
-#     summary_freq: 500
-#     keep_checkpoints: 5
-
-
-
-#   #   behaviors:
-#   # MyBehavior:
-#   #   trainer_type: ppo
-#   #   hyperparameters:
-#   #     batch_size: 1024
-#   #     buffer_size: 10240
-#   #     learning_rate: 3.0e-4
-#   #   network_settings:
-#   #     hidden_units: 128
-#   #     num_layers: 2
-#   #   reward_signals:
-#   #     extrinsic:
-#   #       gamma: 0.99
-#   #       strength: 1.0
-#   #   max_steps: 500000
-#   #   time_horizon: 64
-#   #   summary_freq: 500
-#   #   keep_checkpoints: 5
