@@ -34,7 +34,7 @@ public class PPOCarController : Agent
 
     void Start()
     {
-        Time.timeScale = 50f; // Speed up training 200x
+        Time.timeScale = 50f;
         rb = GetComponent<Rigidbody>();
         startPosition = transform.position;
         startRotation = transform.rotation;
@@ -57,12 +57,6 @@ public class PPOCarController : Agent
             (currentPiece-1) * 1f - wallHits * 0.2f,
             fixedUpdateCount
         );
-
-        // Debug log for episode start (conditional to avoid flooding)
-        if (episodeCount % 100 == 0) // Log every 100 episodes
-        {
-            Debug.Log("PPO Episode started");
-        }
 
         // Regenerate the track for PPO
         if (trackGenerator == null)
@@ -241,7 +235,7 @@ public class PPOCarController : Agent
 
     public override void OnActionReceived(ActionBuffers actions)
     {
-        float steer = -(actions.ContinuousActions[0]);
+        float steer = actions.ContinuousActions[0];
         float gas = Mathf.Clamp01(actions.ContinuousActions[1]);
 
         float moveDist = gas * Speed * Time.deltaTime;
@@ -359,21 +353,6 @@ public class PPOCarController : Agent
         for (int i = 0; i < 5; i++)
         {
             Debug.DrawRay(origin, dirs[i] * SensorRange, rayColors[i], 0f);
-        }
-
-        // Optional: Check for timeout
-        if (Time.time - episodeStartTime > 30f) // 30 seconds timeout
-        {
-            // Log the episode data before ending
-            Logger.LogEpisode(
-                "PPO",
-                episodeCount++,
-                currentPiece,
-                wallHits,
-                GetCumulativeReward(),
-                fixedUpdateCount // Added fixed update count to log
-            );
-            EndEpisode();
         }
     }
 }

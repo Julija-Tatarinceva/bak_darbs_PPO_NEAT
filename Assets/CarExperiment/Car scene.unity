@@ -2652,7 +2652,6 @@ MonoBehaviour:
   startDifficulty: 0.1
   curriculumSteps: 100
   pieceLength: 10
-  wallSegmentsPerTurn: 4
   wallThickness: 0.1
   wallPrefab: {fileID: 3083473078262659051, guid: cab3668755ce63848b2fda766476d978, type: 3}
   wallOffset: 2.7
@@ -3015,7 +3014,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100004, guid: bc8a6ba9c509b6c4b9bd2b715060d813, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: bc8a6ba9c509b6c4b9bd2b715060d813, type: 3}
       propertyPath: m_LocalScale.x
@@ -3076,10 +3075,18 @@ PrefabInstance:
     - target: {fileID: 1306224377846004890, guid: bc8a6ba9c509b6c4b9bd2b715060d813, type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: 53bdfcb1506a4e545873be35239aa9c2, type: 3}
+      objectReference: {fileID: 5022602860645237092, guid: 6ad3affcbf973c543afd96f0d7fc97b9, type: 3}
     - target: {fileID: 1306224377846004890, guid: bc8a6ba9c509b6c4b9bd2b715060d813, type: 3}
       propertyPath: m_BehaviorName
       value: Car
+      objectReference: {fileID: 0}
+    - target: {fileID: 1306224377846004890, guid: bc8a6ba9c509b6c4b9bd2b715060d813, type: 3}
+      propertyPath: m_BehaviorType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1306224377846004890, guid: bc8a6ba9c509b6c4b9bd2b715060d813, type: 3}
+      propertyPath: m_InferenceDevice
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1306224377846004890, guid: bc8a6ba9c509b6c4b9bd2b715060d813, type: 3}
       propertyPath: m_BrainParameters.VectorActionSpaceType

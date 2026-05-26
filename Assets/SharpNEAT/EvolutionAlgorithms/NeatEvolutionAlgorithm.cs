@@ -188,35 +188,6 @@ namespace SharpNeat.EvolutionAlgorithms
         /// </summary>
         protected override IEnumerator PerformOneGeneration()
         {
-            // --- GLOBAL ELITISM: Capture the best genome to protect from trimming extinction ---
-            TGenome globalElitGenome = null;
-            int globalElitSpecieIdx = -1;
-            if(_genomeList != null && _genomeList.Count > 0)
-            {
-                // Find the fittest genome in the current population
-                double bestFit = -1.0;
-                for(int i = 0; i < _genomeList.Count; i++)
-                {
-                    if(_genomeList[i].EvaluationInfo.Fitness > bestFit)
-                    {
-                        bestFit = _genomeList[i].EvaluationInfo.Fitness;
-                        globalElitGenome = _genomeList[i];
-                    }
-                }
-                // Track which specie currently contains it
-                if(globalElitGenome != null)
-                {
-                    for(int si = 0; si < _specieList.Count; si++)
-                    {
-                        if(_specieList[si].GenomeList.Contains(globalElitGenome))
-                        {
-                            globalElitSpecieIdx = si;
-                            break;
-                        }
-                    }
-                }
-            }
-
             // Calculate statistics for each specie (mean fitness, target size, number of offspring to produce etc.)
             int offspringCount;
             SpecieStats[] specieStatsArr = CalcSpecieStats(out offspringCount);
@@ -226,17 +197,6 @@ namespace SharpNeat.EvolutionAlgorithms
 
             // Trim species back to their elite genomes.
             bool emptySpeciesFlag = TrimSpeciesBackToElite(specieStatsArr);
-
-            // --- Re-insert global elite if trimming removed it ---
-            if(globalElitGenome != null && globalElitSpecieIdx >= 0)
-            {
-                // Check if the elite genome is still in its original specie
-                if(!_specieList[globalElitSpecieIdx].GenomeList.Contains(globalElitGenome))
-                {
-                    // Trimming removed it; re-insert at the front to mark it as elite
-                    _specieList[globalElitSpecieIdx].GenomeList.Insert(0, globalElitGenome);
-                }
-            }
 
             // Rebuild _genomeList. It will now contain just the elite genomes.
             RebuildGenomeList();
